@@ -156,3 +156,18 @@ export interface SettingResponse {
     version: string
   }
 }
+
+export interface ToolGroupResponse {
+  success: boolean
+  data: ToolGroup[]
+}
+
+export interface ToolGroup {
+  group: {
+    id: number
+    created_at: string
+    updated_at: string
+    name: string
+  }
+  tools: number[]
+}
