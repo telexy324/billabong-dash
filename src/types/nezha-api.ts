@@ -171,3 +171,18 @@ export interface ToolGroup {
   }
   tools: number[]
 }
+
+export interface ToolResponse {
+  success: boolean
+  data: Tool[]
+}
+
+export interface Tool {
+  id: number
+  created_at: string
+  updated_at: string
+  name: string
+  summary: string
+  description: string
+  downloads: number
+}

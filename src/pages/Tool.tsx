@@ -12,9 +12,9 @@ import { SORT_ORDERS, SORT_TYPES } from "@/context/sort-context"
 import { useSort } from "@/hooks/use-sort"
 import { useStatus } from "@/hooks/use-status"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
-import { fetchToolGroup } from "@/lib/nezha-api"
+import { fetchToolGroup, fetchTool } from "@/lib/nezha-api"
 import { cn, formatNezhaInfo } from "@/lib/utils"
-import { NezhaWebsocketResponse } from "@/types/nezha-api"
+import { NezhaWebsocketResponse, ToolGroup } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon, ViewColumnsIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
@@ -23,13 +23,17 @@ import { useEffect, useRef, useState } from "react"
 export default function Tools() {
   const { sortType, sortOrder, setSortOrder, setSortType } = useSort()
   const { data: groupData } = useQuery({
-    queryKey: ["server-group"],
+    queryKey: ["tool-group"],
     queryFn: () => fetchToolGroup(),
+  })
+  const { data: toolData } = useQuery({
+    queryKey: ["tool"],
+    queryFn: () => fetchTool(),
   })
   const { lastMessage, connected } = useWebSocketContext()
   const { status } = useStatus()
-  const [showServices, setShowServices] = useState<string>("0")
-  const [showMap, setShowMap] = useState<string>("0")
+  // const [showServices, setShowServices] = useState<string>("0")
+  // const [showMap, setShowMap] = useState<string>("0")
   const [inline, setInline] = useState<string>("0")
   const containerRef = useRef<HTMLDivElement>(null)
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
@@ -50,14 +54,14 @@ export default function Tools() {
     sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
   }
 
-  useEffect(() => {
-    const showServicesState = localStorage.getItem("showServices")
-    if (window.ForceShowServices) {
-      setShowServices("1")
-    } else if (showServicesState !== null) {
-      setShowServices(showServicesState)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const showServicesState = localStorage.getItem("showServices")
+  //   if (window.ForceShowServices) {
+  //     setShowServices("1")
+  //   } else if (showServicesState !== null) {
+  //     setShowServices(showServicesState)
+  //   }
+  // }, [])
 
   useEffect(() => {
     const inlineState = localStorage.getItem("inline")
@@ -68,14 +72,14 @@ export default function Tools() {
     }
   }, [])
 
-  useEffect(() => {
-    const showMapState = localStorage.getItem("showMap")
-    if (window.ForceShowMap) {
-      setShowMap("1")
-    } else if (showMapState !== null) {
-      setShowMap(showMapState)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const showMapState = localStorage.getItem("showMap")
+  //   if (window.ForceShowMap) {
+  //     setShowMap("1")
+  //   } else if (showMapState !== null) {
+  //     setShowMap(showMapState)
+  //   }
+  // }, [])
 
   useEffect(() => {
     const savedGroup = sessionStorage.getItem("selectedGroup") || "All"
@@ -84,48 +88,48 @@ export default function Tools() {
     restoreScrollPosition()
   }, [])
 
-  const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
+  // const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
 
   const groupTabs = [
     "All",
     ...(groupData?.data
-      ?.filter((item: ServerGroup) => {
-        return Array.isArray(item.servers) && item.servers.some((serverId) => nezhaWsData?.servers?.some((server) => server.id === serverId))
+      ?.filter((item: ToolGroup) => {
+        return Array.isArray(item.tools) && item.tools.some((toolId) => toolData?.data?.some((tool) => tool.id === toolId))
       })
-      ?.map((item: ServerGroup) => item.group.name) || []),
+      ?.map((item: ToolGroup) => item.group.name) || []),
   ]
 
-  if (!connected && !lastMessage) {
-    return (
-      <div className="flex flex-col items-center min-h-96 justify-center ">
-        <div className="font-semibold flex items-center gap-2 text-sm">
-          <Loader visible={true} />
-          {t("info.websocketConnecting")}
-        </div>
-      </div>
-    )
-  }
+  // if (!connected && !lastMessage) {
+  //   return (
+  //     <div className="flex flex-col items-center min-h-96 justify-center ">
+  //       <div className="font-semibold flex items-center gap-2 text-sm">
+  //         <Loader visible={true} />
+  //         {t("info.websocketConnecting")}
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
-  if (!nezhaWsData) {
-    return (
-      <div className="flex flex-col items-center justify-center ">
-        <p className="font-semibold text-sm">{t("info.processing")}</p>
-      </div>
-    )
-  }
+  // if (!toolData) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center ">
+  //       <p className="font-semibold text-sm">{t("info.processing")}</p>
+  //     </div>
+  //   )
+  // }
 
-  let filteredServers =
-    nezhaWsData?.servers?.filter((server) => {
+  let filteredTools =
+    toolData?.data?.filter((tool) => {
       if (currentGroup === "All") return true
       const group = groupData?.data?.find(
-        (g: ServerGroup) => g.group.name === currentGroup && Array.isArray(g.servers) && g.servers.includes(server.id),
+        (g: ToolGroup) => g.group.name === currentGroup && Array.isArray(g.tools) && g.tools.includes(tool.id),
       )
       return !!group
     }) || []
 
-  const totalServers = filteredServers.length || 0
-  const onlineServers = filteredServers.filter((server) => formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
-  const offlineServers = filteredServers.filter((server) => !formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
+  const totalTools = filteredTools.length || 0
+  const onlineTools = filteredTools.filter((server) => formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
+  const offlineTools = filteredTools.filter((server) => !formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
   const up =
     filteredServers.reduce(
       (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_out_transfer ?? 0) : total),
