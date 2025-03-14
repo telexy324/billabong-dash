@@ -1,24 +1,22 @@
-import GlobalMap from "@/components/GlobalMap"
+// import GlobalMap from "@/components/GlobalMap"
 import GroupSwitch from "@/components/GroupSwitch"
-import ServerCard from "@/components/ServerCard"
-import ServerCardInline from "@/components/ServerCardInline"
-import ServerOverview from "@/components/ServerOverview"
-import { ServiceTracker } from "@/components/ServiceTracker"
-import { Loader } from "@/components/loading/Loader"
+// import ServerCard from "@/components/ServerCard"
+// import ServerCardInline from "@/components/ServerCardInline"
+// import { ServiceTracker } from "@/components/ServiceTracker"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { SORT_ORDERS, SORT_TYPES } from "@/context/sort-context"
 import { useSort } from "@/hooks/use-sort"
-import { useStatus } from "@/hooks/use-status"
-import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { fetchToolGroup, fetchTool } from "@/lib/nezha-api"
-import { cn, formatNezhaInfo } from "@/lib/utils"
-import { NezhaWebsocketResponse, ToolGroup } from "@/types/nezha-api"
-import { ServerGroup } from "@/types/nezha-api"
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon, ViewColumnsIcon } from "@heroicons/react/20/solid"
+import { cn } from "@/lib/utils"
+import { ToolGroup } from "@/types/nezha-api"
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ViewColumnsIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useRef, useState } from "react"
+import ToolOverview from "@/components/ToolOverview.tsx"
+import ToolCard from "@/components/ToolCard.tsx"
+import ToolCardInline from "@/components/ToolCardInline.tsx"
 
 export default function Tools() {
   const { sortType, sortOrder, setSortOrder, setSortType } = useSort()
@@ -30,8 +28,6 @@ export default function Tools() {
     queryKey: ["tool"],
     queryFn: () => fetchTool(),
   })
-  const { lastMessage, connected } = useWebSocketContext()
-  const { status } = useStatus()
   // const [showServices, setShowServices] = useState<string>("0")
   // const [showMap, setShowMap] = useState<string>("0")
   const [inline, setInline] = useState<string>("0")
@@ -118,7 +114,7 @@ export default function Tools() {
   //   )
   // }
 
-  let filteredTools =
+  const filteredTools =
     toolData?.data?.filter((tool) => {
       if (currentGroup === "All") return true
       const group = groupData?.data?.find(
@@ -128,147 +124,19 @@ export default function Tools() {
     }) || []
 
   const totalTools = filteredTools.length || 0
-  const onlineTools = filteredTools.filter((server) => formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
-  const offlineTools = filteredTools.filter((server) => !formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
-  const up =
-    filteredServers.reduce(
-      (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_out_transfer ?? 0) : total),
-      0,
-    ) || 0
-  const down =
-    filteredServers.reduce(
-      (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_in_transfer ?? 0) : total),
-      0,
-    ) || 0
-
-  const upSpeed =
-    filteredServers.reduce(
-      (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_out_speed ?? 0) : total),
-      0,
-    ) || 0
-  const downSpeed =
-    filteredServers.reduce(
-      (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_in_speed ?? 0) : total),
-      0,
-    ) || 0
-
-  filteredServers =
-    status === "all"
-      ? filteredServers
-      : filteredServers.filter((server) => [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"))
-
-  filteredServers = filteredServers.sort((a, b) => {
-    const serverAInfo = formatNezhaInfo(nezhaWsData.now, a)
-    const serverBInfo = formatNezhaInfo(nezhaWsData.now, b)
-
-    if (sortType !== "name") {
-      // 仅在非 "name" 排序时，先按在线状态排序
-      if (!serverAInfo.online && serverBInfo.online) return 1
-      if (serverAInfo.online && !serverBInfo.online) return -1
-      if (!serverAInfo.online && !serverBInfo.online) {
-        // 如果两者都离线，可以继续按照其他条件排序，或者保持原序
-        // 这里选择保持原序
-        return 0
-      }
-    }
-
-    let comparison = 0
-
-    switch (sortType) {
-      case "name":
-        comparison = a.name.localeCompare(b.name)
-        break
-      case "uptime":
-        comparison = (a.state?.uptime ?? 0) - (b.state?.uptime ?? 0)
-        break
-      case "system":
-        comparison = a.host.platform.localeCompare(b.host.platform)
-        break
-      case "cpu":
-        comparison = (a.state?.cpu ?? 0) - (b.state?.cpu ?? 0)
-        break
-      case "mem":
-        comparison = (a.state?.mem_used ?? 0) - (b.state?.mem_used ?? 0)
-        break
-      case "stg":
-        comparison = (a.state?.disk_used ?? 0) - (b.state?.disk_used ?? 0)
-        break
-      case "up":
-        comparison = (a.state?.net_out_speed ?? 0) - (b.state?.net_out_speed ?? 0)
-        break
-      case "down":
-        comparison = (a.state?.net_in_speed ?? 0) - (b.state?.net_in_speed ?? 0)
-        break
-      case "up total":
-        comparison = (a.state?.net_out_transfer ?? 0) - (b.state?.net_out_transfer ?? 0)
-        break
-      case "down total":
-        comparison = (a.state?.net_in_transfer ?? 0) - (b.state?.net_in_transfer ?? 0)
-        break
-      default:
-        comparison = 0
-    }
-
-    return sortOrder === "asc" ? comparison : -comparison
-  })
+  // todo 增加真实数量
+  const onlineTools = 2
+  const offlineTools = 4
 
   return (
     <div className="mx-auto w-full max-w-5xl px-0">
-      <ServerOverview
-        total={totalServers}
-        online={onlineServers}
-        offline={offlineServers}
-        up={up}
-        down={down}
-        upSpeed={upSpeed}
-        downSpeed={downSpeed}
+      <ToolOverview
+        total={totalTools}
+        online={onlineTools}
+        offline={offlineTools}
       />
       <div className="flex mt-6 items-center justify-between gap-2 server-overview-controls">
         <section className="flex items-center gap-2 w-full overflow-hidden">
-          <button
-            onClick={() => {
-              setShowMap(showMap === "0" ? "1" : "0")
-              localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
-            }}
-            className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
-              {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
-                "text-white": showMap === "1",
-              },
-              {
-                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
-              },
-            )}
-          >
-            <MapIcon
-              className={cn("size-[13px]", {
-                "text-white": showMap === "1",
-              })}
-            />
-          </button>
-          <button
-            onClick={() => {
-              setShowServices(showServices === "0" ? "1" : "0")
-              localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
-            }}
-            className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
-              {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
-                "text-white": showServices === "1",
-              },
-              {
-                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
-              },
-            )}
-          >
-            <ChartBarSquareIcon
-              className={cn("size-[13px]", {
-                "text-white": showServices === "1",
-              })}
-            />
-          </button>
           <button
             onClick={() => {
               setInline(inline === "0" ? "1" : "0")
@@ -352,19 +220,17 @@ export default function Tools() {
           </PopoverContent>
         </Popover>
       </div>
-      {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
-      {showServices === "1" && <ServiceTracker serverList={filteredServers} />}
       {inline === "1" && (
         <section ref={containerRef} className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6 server-inline-list">
-          {filteredServers.map((serverInfo) => (
-            <ServerCardInline now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
+          {filteredTools.map((toolInfo) => (
+            <ToolCardInline key={toolInfo.id} toolInfo={toolInfo} />
           ))}
         </section>
       )}
       {inline === "0" && (
         <section ref={containerRef} className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6 server-card-list">
-          {filteredServers.map((serverInfo) => (
-            <ServerCard now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
+          {filteredTools.map((toolInfo) => (
+            <ToolCard key={toolInfo.id} toolInfo={toolInfo} />
           ))}
         </section>
       )}
