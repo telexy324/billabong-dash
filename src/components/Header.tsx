@@ -5,12 +5,12 @@ import { useBackground } from "@/hooks/use-background"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api"
 import { cn } from "@/lib/utils"
-import NumberFlow, { NumberFlowGroup } from "@number-flow/react"
+// import NumberFlow, { NumberFlowGroup } from "@number-flow/react"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { ImageMinus } from "lucide-react"
-import { DateTime } from "luxon"
-import { useEffect, useRef, useState } from "react"
+// import { DateTime } from "luxon"
+import { useEffect, useRef} from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
@@ -76,8 +76,8 @@ function Header() {
   const customBackgroundImage = backgroundImage
 
   return (
-    <div className="mx-auto w-full max-w-5xl">
-      <section className="flex items-center justify-between header-top">
+    <div className="sticky top-0 z-50 mx-auto w-full bg-background/95 backdrop-blur">
+      <section className="flex h-16 items-center justify-between header-top">
         <section
           onClick={() => {
             sessionStorage.removeItem("selectedGroup")
@@ -139,7 +139,7 @@ function Header() {
         <DashboardLink />
         <Links />
       </div>
-      <Overview />
+      {/*<Overview />*/}
     </div>
   )
 }
@@ -265,39 +265,39 @@ function DashboardLink() {
   )
 }
 
-function Overview() {
-  const { t } = useTranslation()
-  const [time, setTime] = useState({
-    hh: DateTime.now().setLocale("en-US").hour,
-    mm: DateTime.now().setLocale("en-US").minute,
-    ss: DateTime.now().setLocale("en-US").second,
-  })
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTime({
-        hh: DateTime.now().setLocale("en-US").hour,
-        mm: DateTime.now().setLocale("en-US").minute,
-        ss: DateTime.now().setLocale("en-US").second,
-      })
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [])
-  return (
-    <section className={"mt-10 flex flex-col md:mt-16 header-timer"}>
-      <p className="text-base font-semibold">👋 {t("overview")}</p>
-      <div className="flex items-center gap-1.5">
-        <p className="text-sm font-medium opacity-50">{t("whereTheTimeIs")}</p>
-        <NumberFlowGroup>
-          <div style={{ fontVariantNumeric: "tabular-nums" }} className="flex text-sm font-medium mt-0.5">
-            <NumberFlow trend={1} value={time.hh} format={{ minimumIntegerDigits: 2 }} />
-            <NumberFlow prefix=":" trend={1} value={time.mm} digits={{ 1: { max: 5 } }} format={{ minimumIntegerDigits: 2 }} />
-            <p className="mt-[0.5px]">:{time.ss.toString().padStart(2, "0")}</p>
-          </div>
-        </NumberFlowGroup>
-      </div>
-    </section>
-  )
-}
+// function Overview() {
+//   const { t } = useTranslation()
+//   const [time, setTime] = useState({
+//     hh: DateTime.now().setLocale("en-US").hour,
+//     mm: DateTime.now().setLocale("en-US").minute,
+//     ss: DateTime.now().setLocale("en-US").second,
+//   })
+//
+//   useEffect(() => {
+//     const timer = setInterval(() => {
+//       setTime({
+//         hh: DateTime.now().setLocale("en-US").hour,
+//         mm: DateTime.now().setLocale("en-US").minute,
+//         ss: DateTime.now().setLocale("en-US").second,
+//       })
+//     }, 1000)
+//
+//     return () => clearInterval(timer)
+//   }, [])
+//   return (
+//     <section className={"mt-10 flex flex-col md:mt-16 header-timer"}>
+//       <p className="text-base font-semibold">👋 {t("overview")}</p>
+//       <div className="flex items-center gap-1.5">
+//         <p className="text-sm font-medium opacity-50">{t("whereTheTimeIs")}</p>
+//         <NumberFlowGroup>
+//           <div style={{ fontVariantNumeric: "tabular-nums" }} className="flex text-sm font-medium mt-0.5">
+//             <NumberFlow trend={1} value={time.hh} format={{ minimumIntegerDigits: 2 }} />
+//             <NumberFlow prefix=":" trend={1} value={time.mm} digits={{ 1: { max: 5 } }} format={{ minimumIntegerDigits: 2 }} />
+//             <p className="mt-[0.5px]">:{time.ss.toString().padStart(2, "0")}</p>
+//           </div>
+//         </NumberFlowGroup>
+//       </div>
+//     </section>
+//   )
+// }
 export default Header
