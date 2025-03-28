@@ -142,31 +142,19 @@ export default function Tools() {
           {/*/>*/}
           <Tabs defaultValue="recommend" className="bg-white rounded-lg shadow-sm">
             <TabsList className="w-full justify-start border-b rounded-none h-12 bg-white">
-              <TabsTrigger
-                value="recommend"
-                className="data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none h-12"
-              >
-                推荐
-              </TabsTrigger>
-              <TabsTrigger
-                value="follow"
-                className="data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none h-12"
-              >
-                关注
-              </TabsTrigger>
-              <TabsTrigger
-                value="hot"
-                className="data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none h-12"
-              >
-                热榜
-              </TabsTrigger>
-              <TabsTrigger
-                value="video"
-                className="data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none h-12"
-              >
-                视频
-              </TabsTrigger>
+              {groupTabs.map((group) => (
+                <TabsTrigger key={group} value={group}
+                  className="data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none h-12"
+                >
+                  {group}
+                </TabsTrigger>
+              ))}
             </TabsList>
+            {filteredTools.map((tool) => (
+              <TabsContent key={tab} value={tab}>
+                <p>{tab.charAt(0).toUpperCase() + tab.slice(1)} 内容</p>
+              </TabsContent>
+            ))}
             <TabsContent value="recommend" className="p-0 m-0">
               {/* Feed Items */}
               <div className="divide-y">
