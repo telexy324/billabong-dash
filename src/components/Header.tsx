@@ -77,7 +77,7 @@ function Header() {
 
   return (
     <div className="sticky top-0 z-50 border-b mx-auto w-full bg-background/95 backdrop-blur">
-      <section className="flex h-16 items-center justify-between header-top">
+      <section className="flex h-16 px-6 items-center justify-between header-top">
         <section
           onClick={() => {
             sessionStorage.removeItem("selectedGroup")

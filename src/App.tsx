@@ -17,6 +17,8 @@ import NotFound from "./pages/NotFound"
 import Server from "./pages/Server"
 import ServerDetail from "./pages/ServerDetail"
 import Tool from "./pages/Tool"
+import Home from "./pages/page"
+import MD from "./pages/MD"
 
 const App: React.FC = () => {
   const { data: settingData, error } = useQuery({
@@ -99,6 +101,8 @@ const App: React.FC = () => {
               <Route path="/error" element={<ErrorPage />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/tool" element={<Tool />} />
+              <Route path="/editor" element={<Home />} />
+              <Route path="/mdeditor" element={<MD />} />
             </Routes>
           </main>
           <Footer />

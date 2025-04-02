@@ -185,5 +185,5 @@ export interface Tool {
   summary: string
   description: string
   downloads: number
-  disabled: boolean
+  enabled: boolean
 }

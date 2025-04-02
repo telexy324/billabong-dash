@@ -71,8 +71,15 @@ export const fetchToolGroup = async (): Promise<ToolGroupResponse> => {
   return data
 }
 
-export const fetchTool = async (): Promise<ToolResponse> => {
-  const response = await fetch("/api/v1/tool")
+export const fetchTool = async (group_id?: number): Promise<ToolResponse> => {
+  let url: string
+  console.log(group_id)
+  if (group_id) {
+    url = `/api/v1/tool?groupId=${group_id}`
+  } else {
+    url = `/api/v1/tool`
+  }
+  const response = await fetch(url)
   const data = await response.json()
   if (data.error) {
     throw new Error(data.error)
