@@ -1,15 +1,16 @@
-import { fetchToolGroup, fetchTool } from "@/lib/nezha-api"
+import { fetchTopicGroup, fetchTopic } from "@/lib/nezha-api"
 import { ChevronRightIcon, UserIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Link } from "react-router-dom";
 
-export default function Tools() {
+export default function Topic() {
   const { data: groupData } = useQuery({
-    queryKey: ["tool-group"],
-    queryFn: () => fetchToolGroup(),
+    queryKey: ["topic-group"],
+    queryFn: () => fetchTopicGroup(),
   })
   const [activeTab, setActiveTab] = useState<string | null>(null)
   useEffect(() => {
@@ -20,9 +21,9 @@ export default function Tools() {
   const defaultTab = groupData?.data[0].group.name
   const selectedTab = activeTab || defaultTab
   const selectedTabId = groupData?.data.find((data) => data.group.name === selectedTab)?.group.id
-  const { data: toolData } = useQuery({
-    queryKey: ["tool", selectedTabId],
-    queryFn: () => fetchTool(selectedTabId),
+  const { data: topicData } = useQuery({
+    queryKey: ["topic", selectedTabId],
+    queryFn: () => fetchTopic(selectedTabId),
   })
 
   return (
@@ -41,16 +42,18 @@ export default function Tools() {
             </TabsList>
             <TabsContent value={activeTab?activeTab:""} className="p-0 m-0">
               <div className="divide-y">
-              {toolData?.data.map((tool) => (
+              {topicData?.data.map((topic) => (
                 <div className="p-4 space-y-4">
                   <div className="flex items-center gap-2">
                     <UserIcon className="h-6 w-6" />
                     <span className="text-sm font-medium">用户名</span>
-                    <span className="text-xs text-gray-500">上传了工具</span>
+                    <span className="text-xs text-gray-500">发表了话题</span>
                   </div>
-                  <h3 className="text-lg font-bold hover:text-blue-600">为什么越来越多的年轻人选择"躺平"？</h3>
+                  <Link to="#section-id">
+                    <h3 className="text-lg font-bold hover:text-blue-600">{topic.title}</h3>
+                  </Link>
                   <p className="text-gray-700 line-clamp-3">
-                    {tool.description}
+                    {topic.title}
                   </p>
                 </div>
               ))}

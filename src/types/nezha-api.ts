@@ -187,3 +187,113 @@ export interface Tool {
   downloads: number
   enabled: boolean
 }
+
+export interface ModelUpload {
+  created_at: string
+  id: number
+  /** 编号 */
+  key: string
+  /** 文件名 */
+  name: string
+  size: number
+  /** 文件标签 */
+  tag: string
+  updated_at: string
+  /** 文件地址 */
+  url: string
+}
+
+export interface ModelTopic {
+  /** 跟帖数量 */
+  commentCount: number
+  /** 内容 */
+  content: string
+  created_at: string
+  id: number
+  /** 图片 	// 回复可见内容 */
+  imageList: string
+  images: ModelUpload[]
+  /** 最后回复时间 */
+  lastCommentTime: number
+  /** 最后回复用户 	// 扩展数据 */
+  lastCommentUserId: number
+  /** 点赞数量 */
+  likeCount: number
+  /** 是否推荐 */
+  recommend: boolean
+  /** 推荐时间 */
+  recommendTime: number
+  /** 状态：0：正常、1：删除 */
+  status: number
+  /** 置顶 */
+  sticky: boolean
+  /** 置顶时间 */
+  stickyTime: number
+  /** 用户 */
+  title: string
+  updated_at: string
+  /** 查看数量 */
+  viewCount: number
+}
+
+export interface CreateResponse {
+  success: boolean
+  data: {
+    id: number
+  }
+}
+
+export interface ModelTopicForm {
+  /** 跟帖数量 */
+  commentCount?: number
+  /** 内容 	// 图片 	// 回复可见内容 */
+  content?: string
+  images?: ModelUpload[]
+  /** 最后回复时间 */
+  lastCommentTime?: number
+  /** 最后回复用户 	// 扩展数据 */
+  lastCommentUserId?: number
+  /** 点赞数量 */
+  likeCount?: number
+  /** 是否推荐 */
+  recommend?: boolean
+  /** 推荐时间 */
+  recommendTime?: number
+  /** 状态：0：正常、1：删除 */
+  status?: number
+  /** 置顶 */
+  sticky?: boolean
+  /** 置顶时间 */
+  stickyTime?: number
+  /** 标题 */
+  title: string
+  /** 查看数量 */
+  viewCount?: number
+}
+
+export interface ModelTopicGroup {
+  created_at: string
+  id: number
+  name: string
+  updated_at: string
+}
+
+export interface ModelTopicGroupResponseItem {
+  group: ModelTopicGroup
+  topics: number[]
+}
+
+export interface TopicResponse {
+  success: boolean
+  data: ModelTopic[]
+}
+
+export interface TopicGroupResponse {
+  success: boolean
+  data: ModelTopicGroupResponseItem[]
+}
+
+export interface TopicDetailResponse {
+  success: boolean
+  data: ModelTopic
+}

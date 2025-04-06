@@ -19,6 +19,7 @@ import ServerDetail from "./pages/ServerDetail"
 import Tool from "./pages/Tool"
 import Home from "./pages/page"
 import MD from "./pages/MD"
+import Topic from "@/pages/Topic.tsx"
 
 const App: React.FC = () => {
   const { data: settingData, error } = useQuery({
@@ -103,6 +104,7 @@ const App: React.FC = () => {
               <Route path="/tool" element={<Tool />} />
               <Route path="/editor" element={<Home />} />
               <Route path="/mdeditor" element={<MD />} />
+              <Route path="/topic" element={<Topic />} />
             </Routes>
           </main>
           <Footer />

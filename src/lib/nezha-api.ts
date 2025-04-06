@@ -6,6 +6,7 @@ import {
   SettingResponse,
   ToolGroupResponse,
   ToolResponse,
+  ModelUpload, CreateResponse, ModelTopicForm, TopicResponse, TopicGroupResponse, TopicDetailResponse, ModelTopic,
 } from "@/types/nezha-api"
 
 let lastestRefreshTokenAt = 0
@@ -85,4 +86,67 @@ export const fetchTool = async (group_id?: number): Promise<ToolResponse> => {
     throw new Error(data.error)
   }
   return data
+}
+
+export const upload = async (file: File): Promise<ModelUpload> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await fetch("/api/v1/file", {
+    method: "POST",
+    body: formData,
+  })
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
+  return data.data
+}
+
+export const createTopic = async (req: ModelTopicForm): Promise<CreateResponse> => {
+  const response = await fetch("/api/v1/topic", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+  })
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
+  return data.data
+}
+
+export const fetchTopicGroup = async (): Promise<TopicGroupResponse> => {
+  const response = await fetch("/api/v1/topic-group")
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
+  return data
+}
+
+export const fetchTopic = async (group_id?: number): Promise<TopicResponse> => {
+  let url: string
+  console.log(group_id)
+  if (group_id) {
+    url = `/api/v1/topic?groupId=${group_id}`
+  } else {
+    url = `/api/v1/topic`
+  }
+  const response = await fetch(url)
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
+  return data
+}
+
+export const fetchTopicDetail = async (topic_id: number): Promise<ModelTopic> => {
+  const response = await fetch(`/api/v1/topic/${topic_id}`)
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
+  return data.data
 }
