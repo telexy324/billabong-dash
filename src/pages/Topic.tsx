@@ -49,7 +49,7 @@ export default function Topic() {
                     <span className="text-sm font-medium">用户名</span>
                     <span className="text-xs text-gray-500">发表了话题</span>
                   </div>
-                  <Link to="#section-id">
+                  <Link to={`/topic/${topic.id}`}>
                     <h3 className="text-lg font-bold hover:text-blue-600">{topic.title}</h3>
                   </Link>
                   <p className="text-gray-700 line-clamp-3">

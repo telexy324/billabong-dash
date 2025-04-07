@@ -1,17 +1,9 @@
-import { NetworkChart } from "@/components/NetworkChart"
-import ServerDetailChart from "@/components/ServerDetailChart"
-import ServerDetailOverview from "@/components/ServerDetailOverview"
-import TabSwitch from "@/components/TabSwitch"
-import { Separator } from "@/components/ui/separator"
-import { useEffect, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useEffect } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
-import { fetchMonitor, fetchTopicDetail } from "@/lib/nezha-api.ts"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx"
-import { ChevronRightIcon, UserIcon } from "@heroicons/react/20/solid"
+import { fetchTopicDetail } from "@/lib/nezha-api.ts"
 import { Button } from "@/components/ui/button.tsx"
-import { Badge } from "@/components/ui/badge.tsx"
-import { Card, CardHeader,CardTitle,CardDescription,CardContent,CardFooter } from "@/components/ui/card.tsx"
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card.tsx"
 
 export default function TopicDetail() {
   const navigate = useNavigate()
@@ -36,6 +28,20 @@ export default function TopicDetail() {
     return null
   }
 
+  interface HtmlRendererProps {
+    html: string;
+    className?: string;
+  }
+
+  const HtmlRenderer: React.FC<HtmlRendererProps> = ({ html, className }) => {
+    return (
+      <div
+        className={className}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    )
+  }
+
   return (
     <div className="mx-auto w-full max-w-5xl px-0">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -50,28 +56,7 @@ export default function TopicDetail() {
               {/*<CardDescription>Deploy your new project in one-click.</CardDescription>*/}
             </CardHeader>
             <CardContent className="border-t">
-              <form>
-                <div className="grid w-full items-center gap-4">
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" placeholder="Name of your project" />
-                  </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="framework">Framework</Label>
-                    <Select>
-                      <SelectTrigger id="framework">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="next">Next.js</SelectItem>
-                        <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                        <SelectItem value="astro">Astro</SelectItem>
-                        <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </form>
+              <HtmlRenderer html={data ? data.content : ""}/>
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">Cancel</Button>
@@ -83,14 +68,15 @@ export default function TopicDetail() {
         <div className="md:col-span-2 space-y-6">
           <div className="bg-white rounded-none shadow-sm p-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium">{data.title}</h3>
+              <h3 className="font-medium">{data?.title}</h3>
               <Button variant="ghost" size="sm" className="text-xs text-gray-500">
                 更多
               </Button>
             </div>
             <ol className="space-y-3">
               <li className="flex items-start gap-2">
-                  <span className="flex items-center justify-center bg-blue-600 text-white rounded h-5 w-5 text-xs font-medium">
+                  <span
+                    className="flex items-center justify-center bg-blue-600 text-white rounded h-5 w-5 text-xs font-medium">
                     1
                   </span>
                 <div>
@@ -99,7 +85,8 @@ export default function TopicDetail() {
                 </div>
               </li>
               <li className="flex items-start gap-2">
-                  <span className="flex items-center justify-center bg-blue-600 text-white rounded h-5 w-5 text-xs font-medium">
+                  <span
+                    className="flex items-center justify-center bg-blue-600 text-white rounded h-5 w-5 text-xs font-medium">
                     2
                   </span>
                 <div>
@@ -108,7 +95,8 @@ export default function TopicDetail() {
                 </div>
               </li>
               <li className="flex items-start gap-2">
-                  <span className="flex items-center justify-center bg-blue-600 text-white rounded h-5 w-5 text-xs font-medium">
+                  <span
+                    className="flex items-center justify-center bg-blue-600 text-white rounded h-5 w-5 text-xs font-medium">
                     3
                   </span>
                 <div>
@@ -117,7 +105,8 @@ export default function TopicDetail() {
                 </div>
               </li>
               <li className="flex items-start gap-2">
-                  <span className="flex items-center justify-center bg-gray-200 text-gray-700 rounded h-5 w-5 text-xs font-medium">
+                  <span
+                    className="flex items-center justify-center bg-gray-200 text-gray-700 rounded h-5 w-5 text-xs font-medium">
                     4
                   </span>
                 <div>
@@ -126,7 +115,8 @@ export default function TopicDetail() {
                 </div>
               </li>
               <li className="flex items-start gap-2">
-                  <span className="flex items-center justify-center bg-gray-200 text-gray-700 rounded h-5 w-5 text-xs font-medium">
+                  <span
+                    className="flex items-center justify-center bg-gray-200 text-gray-700 rounded h-5 w-5 text-xs font-medium">
                     5
                   </span>
                 <div>

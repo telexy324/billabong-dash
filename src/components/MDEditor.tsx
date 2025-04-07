@@ -68,13 +68,13 @@ export default function Md(props: MDProps) {
         //     onValueChange(items)
         // }
         // console.log(newItem.url);
-        // if (newItem.url.indexOf('http://') > -1 || newItem.url.indexOf('https://') > -1) {
-        //   urls = urls ? [...urls, newItem.url] : [newItem.url];
-        // } else {
-        //   const localUrl = "http://localhost:8008/api/v1/"+newItem.url
-        //   urls = urls ? [...urls, localUrl] : [localUrl];
-        // }
-        urls = urls ? [...urls, newItem.url] : [newItem.url];
+        if (newItem.url.indexOf('http://') > -1 || newItem.url.indexOf('https://') > -1) {
+          urls = urls ? [...urls, newItem.url] : [newItem.url];
+        } else {
+          const localUrl = "http://localhost:8008/api/v1/"+newItem.url
+          urls = urls ? [...urls, localUrl] : [localUrl];
+        }
+        // urls = urls ? [...urls, newItem.url] : [newItem.url];
       } catch (e) {
         console.error(e)
       }
