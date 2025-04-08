@@ -10,13 +10,14 @@ import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { ImageMinus } from "lucide-react"
 // import { DateTime } from "luxon"
-import { useEffect, useRef} from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { LanguageSwitcher } from "./LanguageSwitcher"
 import { Loader, LoadingSpinner } from "./loading/Loader"
 import { Button } from "./ui/button"
+import MessageIcon from "@/components/MessageIcon.tsx"
 
 function Header() {
   const { t } = useTranslation()
@@ -75,6 +76,18 @@ function Header() {
 
   const customBackgroundImage = backgroundImage
 
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // 模拟异步获取消息数量（可以换成你自己的逻辑）
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const fakeCount = Math.floor(Math.random() * 120);
+      setUnreadCount(fakeCount);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="sticky top-0 z-50 border-b mx-auto w-full bg-background/95 backdrop-blur">
       <section className="flex h-16 px-6 items-center justify-between header-top">
@@ -105,6 +118,7 @@ function Header() {
           </div>
           <LanguageSwitcher />
           <ModeToggle />
+          <MessageIcon unreadCount={unreadCount} />
           {(customBackgroundImage || sessionStorage.getItem("savedBackgroundImage")) && (
             <Button
               variant="outline"
