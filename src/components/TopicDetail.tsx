@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query"
 import { fetchTopicDetail } from "@/lib/nezha-api.ts"
 import { Button } from "@/components/ui/button.tsx"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card.tsx"
+import { LikeButton } from "@/components/Like.tsx"
+import { FavoriteButton } from "@/components/Favorite.tsx"
 
 export default function TopicDetail() {
   const navigate = useNavigate()
@@ -44,12 +46,16 @@ export default function TopicDetail() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-0">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
         <div className="space-y-6">
-
+          <Card className="bg-white rounded-none shadow-sm p-4">
+            <CardContent className="border-t">
+              <HtmlRenderer html={data ? data.content : ""}/>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="md:col-span-2 space-y-6">
+        <div className="md:col-span-5 space-y-6">
           <Card className="bg-white rounded-none shadow-sm p-4">
             <CardHeader>
               <CardTitle>{data?.title}</CardTitle>
@@ -59,8 +65,17 @@ export default function TopicDetail() {
               <HtmlRenderer html={data ? data.content : ""}/>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button variant="outline">Cancel</Button>
-              <Button>Deploy</Button>
+              <div className="flex gap-6 items-center">
+                <LikeButton
+                  active={false}
+                  count={88}
+                  apiUrl="/api/like"
+                />
+                <FavoriteButton
+                  active={true}
+                  apiUrl="/api/favorite"
+                />
+              </div>
             </CardFooter>
           </Card>
         </div>
