@@ -69,11 +69,11 @@ export default function TopicDetail() {
                 <LikeButton
                   active={false}
                   count={88}
-                  apiUrl="/api/like"
+                  apiUrl="/api/v1/like"
                 />
                 <FavoriteButton
                   active={true}
-                  apiUrl="/api/favorite"
+                  apiUrl="/api/v1/favorite"
                 />
               </div>
             </CardFooter>

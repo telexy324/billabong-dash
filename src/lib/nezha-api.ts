@@ -6,7 +6,7 @@ import {
   SettingResponse,
   ToolGroupResponse,
   ToolResponse,
-  ModelUpload, CreateResponse, ModelTopicForm, TopicResponse, TopicGroupResponse, TopicDetailResponse, ModelTopic,
+  ModelUpload, CreateResponse, ModelTopicForm, TopicResponse, TopicGroupResponse, ModelTopic, ModelUserLikeForm,
 } from "@/types/nezha-api"
 
 let lastestRefreshTokenAt = 0
@@ -144,6 +144,21 @@ export const fetchTopic = async (group_id?: number): Promise<TopicResponse> => {
 
 export const fetchTopicDetail = async (topic_id: number): Promise<ModelTopic> => {
   const response = await fetch(`/api/v1/topic/${topic_id}`)
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
+  return data.data
+}
+
+export const like = async (req: ModelUserLikeForm, url: string): Promise<number> => {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+  })
   const data = await response.json()
   if (data.error) {
     throw new Error(data.error)

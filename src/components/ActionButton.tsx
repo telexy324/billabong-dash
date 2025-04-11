@@ -1,7 +1,7 @@
 // components/base/ActionButton.tsx
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import axios from "axios";
 import clsx from "clsx";
 
@@ -49,7 +49,7 @@ export const ActionButton = ({
   const Icon = isActive ? icon.active : icon.inactive;
 
   return (
-    <motion.button
+    <m.button
       whileTap={{ scale: 1.2 }}
       onClick={() => mutation.mutate(!isActive)}
       disabled={mutation.isPending}
@@ -57,6 +57,6 @@ export const ActionButton = ({
     >
       <Icon className={clsx("w-6 h-6", isActive ? activeColor : "text-gray-500")} />
       {showCount && <span>{displayCount}</span>}
-    </motion.button>
+    </m.button>
   );
 };

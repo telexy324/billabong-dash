@@ -297,3 +297,81 @@ export interface TopicDetailResponse {
   success: boolean
   data: ModelTopic
 }
+
+export interface ModelUserFavoriteForm {
+  /** 实体编号 */
+  entityId: number
+  /** 实体类型 	// 创建时间 */
+  entityType: number
+}
+
+export interface ModelUserLikeForm {
+  /** 实体编号 */
+  entityId: number
+  /** 实体类型 	// 创建时间 */
+  entityType: number
+}
+
+export interface ModelGetLikeIdsForm {
+  /** 实体编号 */
+  entityIds: number[]
+  /** 实体类型 	// 创建时间 */
+  entityType: number
+}
+
+export interface ModelFavorite {
+  created_at: string
+  /** 收藏实体编号 */
+  entityId: number
+  /** 收藏实体类型 */
+  entityType: number
+  id: number
+  updated_at: string
+}
+
+export interface ModelComment {
+  /** 评论数量 */
+  commentCount: number
+  /** 内容 */
+  content: string
+  /** 内容类型：markdown、html */
+  contentType: string
+  created_at: string
+  /** 被评论实体编号 */
+  entityId: number
+  /** 被评论实体类型 */
+  entityType: number
+  id: number
+  /** 图片 */
+  imageList: string
+  images: ModelUpload[]
+  /** 点赞数量 */
+  likeCount: number
+  /** 引用的评论编号 */
+  quoteId: number
+  /** 状态：0：待审核、1：审核通过、2：审核失败、3：已发布 */
+  status: number
+  updated_at: string
+}
+
+export interface ModelCommentForm {
+  /** 评论数量 */
+  commentCount?: number
+  /** 内容 */
+  content?: string
+  /** 内容类型：markdown、html */
+  contentType?: string
+  /** 被评论实体编号 */
+  entityId?: number
+  /** 被评论实体类型 */
+  entityType?: number
+  /** 图片 */
+  imageList?: string
+  images?: ModelUpload[]
+  /** 点赞数量 */
+  likeCount?: number
+  /** 引用的评论编号 */
+  quoteId?: number
+  /** 状态：0：待审核、1：审核通过、2：审核失败、3：已发布 */
+  status?: number
+}
