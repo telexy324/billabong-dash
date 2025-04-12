@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button.tsx"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card.tsx"
 import { LikeButton } from "@/components/Like.tsx"
 import { FavoriteButton } from "@/components/Favorite.tsx"
+import { HandThumbUpIcon as SolidLike } from "@heroicons/react/24/solid"
+import { HandThumbUpIcon as OutlineLike } from "@heroicons/react/24/outline"
+import { HeartIcon as SolidHeart } from "@heroicons/react/24/solid"
+import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline"
 
 export default function TopicDetail() {
   const navigate = useNavigate()
@@ -67,13 +71,17 @@ export default function TopicDetail() {
             <CardFooter className="flex justify-between">
               <div className="flex gap-6 items-center">
                 <LikeButton
-                  active={false}
-                  count={88}
-                  apiUrl="/api/v1/like"
+                  active={data?data.liked:false}
+                  count={data?data.likeCount:0}
+                  icon={{ active: SolidLike, inactive: OutlineLike }}
+                  activeColor="text-yellow-400"
+                  req={{entityId:data?data.id:0,entityType:1}}
                 />
                 <FavoriteButton
-                  active={true}
-                  apiUrl="/api/v1/favorite"
+                  active={data?data.favorited:false}
+                  icon={{ active: SolidHeart, inactive: OutlineHeart }}
+                  activeColor="text-red-500"
+                  req={{entityId:data?data.id:0,entityType:2}}
                 />
               </div>
             </CardFooter>

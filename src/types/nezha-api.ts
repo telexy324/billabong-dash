@@ -209,6 +209,7 @@ export interface ModelTopic {
   /** 内容 */
   content: string
   created_at: string
+  favorited: boolean
   id: number
   /** 图片 	// 回复可见内容 */
   imageList: string
@@ -219,6 +220,7 @@ export interface ModelTopic {
   lastCommentUserId: number
   /** 点赞数量 */
   likeCount: number
+  liked: boolean
   /** 是否推荐 */
   recommend: boolean
   /** 推荐时间 */
@@ -341,12 +343,14 @@ export interface ModelComment {
   entityId: number
   /** 被评论实体类型 */
   entityType: number
+  favorited: boolean
   id: number
   /** 图片 */
   imageList: string
   images: ModelUpload[]
   /** 点赞数量 */
   likeCount: number
+  liked: boolean
   /** 引用的评论编号 */
   quoteId: number
   /** 状态：0：待审核、1：审核通过、2：审核失败、3：已发布 */

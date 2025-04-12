@@ -6,7 +6,14 @@ import {
   SettingResponse,
   ToolGroupResponse,
   ToolResponse,
-  ModelUpload, CreateResponse, ModelTopicForm, TopicResponse, TopicGroupResponse, ModelTopic, ModelUserLikeForm,
+  ModelUpload,
+  CreateResponse,
+  ModelTopicForm,
+  TopicResponse,
+  TopicGroupResponse,
+  ModelTopic,
+  ModelUserLikeForm,
+  ModelUserFavoriteForm,
 } from "@/types/nezha-api"
 
 let lastestRefreshTokenAt = 0
@@ -164,4 +171,18 @@ export const like = async (req: ModelUserLikeForm, url: string): Promise<number>
     throw new Error(data.error)
   }
   return data.data
+}
+
+export const favorite = async (req: ModelUserFavoriteForm, url: string): Promise<void> => {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+  })
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
 }
