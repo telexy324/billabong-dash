@@ -13,7 +13,7 @@ import {
   TopicGroupResponse,
   ModelTopic,
   ModelUserLikeForm,
-  ModelUserFavoriteForm,
+  ModelUserFavoriteForm, ModelCommentForm, CommentResponse,
 } from "@/types/nezha-api"
 
 let lastestRefreshTokenAt = 0
@@ -185,4 +185,28 @@ export const favorite = async (req: ModelUserFavoriteForm, url: string): Promise
   if (data.error) {
     throw new Error(data.error)
   }
+}
+
+export const createComment = async (req: ModelCommentForm): Promise<CreateResponse> => {
+  const response = await fetch("/api/v1/comment", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+  })
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
+  return data.data
+}
+
+export const fetchComment = async (entityId: number, entityType: number): Promise<CommentResponse> => {
+  const response = await fetch(`/api/v1/comment?entityId=${entityId}&entityType=${entityType}`)
+  const data = await response.json()
+  if (data.error) {
+    throw new Error(data.error)
+  }
+  return data
 }

@@ -232,3 +232,43 @@
 .scrollbar-hidden::-webkit-scrollbar {
   display: none; /* Chrome, Safari 和 Opera */
 }
+
+.prose {
+  @apply max-w-none;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold mt-8 mb-4;
+}
+
+.prose h3 {
+  @apply text-xl font-bold mt-6 mb-3;
+}
+
+.prose p {
+  @apply mb-4 text-gray-700 leading-relaxed;
+}
+
+.prose img {
+  @apply rounded-lg my-6;
+}
+
+.prose blockquote {
+  @apply p-4 my-6 border-l-4 border-cyan-500 bg-gray-50;
+}
+
+.prose blockquote p {
+  @apply italic text-gray-700;
+}
+
+.prose ul {
+  @apply list-disc pl-6 mb-4;
+}
+
+.prose ol {
+  @apply list-decimal pl-6 mb-4;
+}
+
+.prose a {
+  @apply text-cyan-600 hover:text-cyan-700 underline;
+}

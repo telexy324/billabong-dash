@@ -379,3 +379,8 @@ export interface ModelCommentForm {
   /** 状态：0：待审核、1：审核通过、2：审核失败、3：已发布 */
   status?: number
 }
+
+export interface CommentResponse {
+  success: boolean
+  data: ModelComment[]
+}
