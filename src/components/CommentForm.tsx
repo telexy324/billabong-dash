@@ -16,11 +16,14 @@ import { ModelCommentForm } from "@/types/nezha-api.ts"
 
 const formSchema = z.object({
   content: z.any(),
+  entityId: z.number(),
+  entityType: z.number(),
 });
 
-export default function CommentForm({initialData, className}: {
+export default function CommentForm({initialData, className, onValueCommit}: {
   initialData: ModelCommentForm | null;
   className?: string;
+  onValueCommit: () => void
 }) {
   const defaultValues = {
     entityId: initialData?.entityId || 0,
@@ -39,6 +42,7 @@ export default function CommentForm({initialData, className}: {
       console.error(e)
       return
     }
+    onValueCommit()
     form.reset()
   }
 

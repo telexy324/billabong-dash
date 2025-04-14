@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { fetchTopicDetail } from "@/lib/nezha-api.ts"
@@ -23,6 +23,11 @@ export default function TopicDetail() {
   }, [])
 
   const { id: topic_id } = useParams()
+
+  const [refreshSignal, setRefreshSignal] = useState(Date.now())
+  const handleValueCommit = () => {
+    setRefreshSignal(Date.now()) // 触发 CommentList 的刷新
+  }
 
   const { data } = useQuery({
     queryKey: ["topic", topic_id],
@@ -55,15 +60,15 @@ export default function TopicDetail() {
   return (
     <div className="mx-auto w-full max-w-5xl px-0">
       <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
-        <div className="space-y-6">
-          <Card className="bg-white rounded-none shadow-sm p-4">
-            <CardContent className="border-t">
-              <HtmlRenderer html={data ? data.content : ""}/>
-            </CardContent>
-          </Card>
-        </div>
+        {/*<div className="space-y-6">*/}
+        {/*  <Card className="bg-white rounded-none shadow-sm p-4">*/}
+        {/*    <CardContent className="border-t">*/}
+        {/*      <HtmlRenderer html={data ? data.content : ""}/>*/}
+        {/*    </CardContent>*/}
+        {/*  </Card>*/}
+        {/*</div>*/}
 
-        <div className="md:col-span-5 space-y-6">
+        <div className="md:col-span-6 space-y-6">
           <Card className="bg-white rounded-none shadow-sm p-4">
             <CardHeader>
               <CardTitle>{data?.title}</CardTitle>
@@ -101,70 +106,17 @@ export default function TopicDetail() {
                 entityId:data?data.id:0,
                 entityType:1,
               }}
+              onValueCommit={handleValueCommit}
             />
             </div>
 
             <Separator className="my-6" />
-
-             {/*Sample Comments */}
-            {/*<div className="space-y-6">*/}
-            {/*  <div className="flex">*/}
-            {/*    <UserIcon className="h-6 w-6" />*/}
-            {/*    <div>*/}
-            {/*      <div className="font-medium">王小明</div>*/}
-            {/*      <div className="text-sm text-gray-500">2023年4月16日</div>*/}
-            {/*      <p className="mt-2 text-gray-700">*/}
-            {/*        非常有见地的文章！我特别同意AI将增强而不是取代人类能力的观点。在我的工作中，AI工具已经帮助我节省了大量处理数据的时间。*/}
-            {/*      </p>*/}
-            {/*      <div className="flex items-center mt-2 space-x-4">*/}
-            {/*        <Button variant="ghost" size="sm" className="text-xs text-gray-500">*/}
-            {/*          <LikeButton*/}
-            {/*            active={data?data.liked:false}*/}
-            {/*            count={data?data.likeCount:0}*/}
-            {/*            icon={{ active: SolidLike, inactive: OutlineLike }}*/}
-            {/*            activeColor="text-yellow-400"*/}
-            {/*            req={{entityId:data?data.id:0,entityType:1}}*/}
-            {/*          />*/}
-            {/*          赞同 (24)*/}
-            {/*        </Button>*/}
-            {/*        <Button variant="ghost" size="sm" className="text-xs text-gray-500">*/}
-            {/*          回复*/}
-            {/*        </Button>*/}
-            {/*      </div>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-
-            {/*  <div className="flex">*/}
-            {/*    <UserIcon className="h-6 w-6" />*/}
-            {/*    <div>*/}
-            {/*      <div className="font-medium">陈思思</div>*/}
-            {/*      <div className="text-sm text-gray-500">2023年4月15日</div>*/}
-            {/*      <p className="mt-2 text-gray-700">*/}
-            {/*        文章提到了AI的伦理问题，这点非常重要。随着AI技术的发展，我们需要建立更完善的监管框架，确保技术发展的同时保护隐私和安全。*/}
-            {/*      </p>*/}
-            {/*      <div className="flex items-center mt-2 space-x-4">*/}
-            {/*        <Button variant="ghost" size="sm" className="text-xs text-gray-500">*/}
-            {/*          <LikeButton*/}
-            {/*            active={data?data.liked:false}*/}
-            {/*            count={data?data.likeCount:0}*/}
-            {/*            icon={{ active: SolidLike, inactive: OutlineLike }}*/}
-            {/*            activeColor="text-yellow-400"*/}
-            {/*            req={{entityId:data?data.id:0,entityType:1}}*/}
-            {/*          />*/}
-            {/*          赞同 (18)*/}
-            {/*        </Button>*/}
-            {/*        <Button variant="ghost" size="sm" className="text-xs text-gray-500">*/}
-            {/*          回复*/}
-            {/*        </Button>*/}
-            {/*      </div>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*</div>*/}
-
-            {/*<Button variant="outline" className="w-full mt-6">*/}
-            {/*  查看更多评论*/}
-            {/*</Button>*/}
-            <CommentList onLoadMore={() => console.log("加载更多")} entityType={1} entityId={data?data.id:0} />
+            <CommentList
+              onLoadMore={() => console.log("加载更多")}
+              entityType={1}
+              entityId={data?data.id:0}
+              refreshSignal={refreshSignal}
+            />
           </Card>
         </div>
         {/* Sidebar */}

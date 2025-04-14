@@ -10,11 +10,12 @@ type CommentListProps = {
   onLoadMore?: () => void
   entityId: number
   entityType: number
+  refreshSignal?: any
 }
 
-export function CommentList({ onLoadMore,entityId,entityType }: CommentListProps) {
+export function CommentList({ onLoadMore,entityId,entityType,refreshSignal }: CommentListProps) {
   const { data } = useQuery({
-    queryKey: ["comment", entityId, entityType],
+    queryKey: ["comment", entityId, entityType, refreshSignal],
     queryFn: () => fetchComment(entityId, entityType),
     refetchOnMount: true,
     enabled: !!entityId && !!entityType,
