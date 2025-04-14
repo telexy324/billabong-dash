@@ -28,6 +28,7 @@ export default function TopicDetail() {
   const handleValueCommit = () => {
     setRefreshSignal(Date.now()) // 触发 CommentList 的刷新
   }
+  const [commentCount, setCommentCount] = useState(0)
 
   const { data } = useQuery({
     queryKey: ["topic", topic_id],
@@ -96,7 +97,7 @@ export default function TopicDetail() {
             </CardFooter>
           </Card>
           <Card className="rounded-none mt-6 p-6">
-            <h3 className="mb-4 text-xl font-bold">评论 (56)</h3>
+            <h3 className="mb-4 text-xl font-bold">评论 ({commentCount})</h3>
 
             <div className="flex mb-4">
             <UserIcon className="h-6 w-6" />
@@ -116,6 +117,7 @@ export default function TopicDetail() {
               entityType={1}
               entityId={data?data.id:0}
               refreshSignal={refreshSignal}
+              onCountChange={setCommentCount}
             />
           </Card>
         </div>

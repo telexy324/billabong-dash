@@ -202,8 +202,11 @@ export const createComment = async (req: ModelCommentForm): Promise<CreateRespon
   return data.data
 }
 
-export const fetchComment = async (entityId: number, entityType: number): Promise<CommentResponse> => {
-  const response = await fetch(`/api/v1/comment?entityId=${entityId}&entityType=${entityType}`)
+export const fetchComment = async (entityId: number, entityType: number, limit: number): Promise<CommentResponse> => {
+  if (!!limit && limit < 10) {
+    limit = 10;
+  }
+  const response = await fetch(`/api/v1/comment?entityId=${entityId}&entityType=${entityType}&limit=${limit}`)
   const data = await response.json()
   if (data.error) {
     throw new Error(data.error)

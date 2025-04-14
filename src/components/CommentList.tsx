@@ -5,21 +5,29 @@ import { HandThumbUpIcon as SolidLike } from "@heroicons/react/24/solid"
 import { HandThumbUpIcon as OutlineLike } from "@heroicons/react/24/outline"
 import { useQuery } from "@tanstack/react-query"
 import { fetchComment } from "@/lib/nezha-api.ts"
+import { useEffect, useState } from "react"
 
 type CommentListProps = {
-  onLoadMore?: () => void
   entityId: number
   entityType: number
   refreshSignal?: any
+  onCountChange?: (count: number) => void
 }
 
-export function CommentList({ onLoadMore,entityId,entityType,refreshSignal }: CommentListProps) {
+export function CommentList({ entityId,entityType,refreshSignal,onCountChange }: CommentListProps) {
+  const [limit, setLimit] = useState(10)
   const { data } = useQuery({
-    queryKey: ["comment", entityId, entityType, refreshSignal],
-    queryFn: () => fetchComment(entityId, entityType),
+    queryKey: ["comment", entityId, entityType, refreshSignal, limit],
+    queryFn: () => fetchComment(entityId, entityType, limit),
     refetchOnMount: true,
     enabled: !!entityId && !!entityType,
   })
+
+  useEffect(() => {
+    if (data?.data && typeof onCountChange === "function") {
+      onCountChange(data.data.length) // 或 data.total 视你的 API 结构而定
+    }
+  }, [data, onCountChange])
 
   return (
     <>
@@ -59,15 +67,13 @@ export function CommentList({ onLoadMore,entityId,entityType,refreshSignal }: Co
         ))}
       </div>
 
-      {onLoadMore && (
-        <Button
-          variant="outline"
-          className="w-full mt-6"
-          onClick={onLoadMore}
-        >
-          查看更多评论
-        </Button>
-      )}
+      <Button
+        variant="outline"
+        className="w-full mt-6"
+        onClick={()=>{setLimit(0)}}
+      >
+        查看更多评论
+      </Button>
     </>
   )
 }
