@@ -16,7 +16,7 @@ import MDEditor from "@/components/MDEditor"
 import { createTopic, fetchTopicGroup } from "@/lib/nezha-api.ts"
 import { FileUploader } from "@/components/FileUploader.tsx"
 import { useQuery } from "@tanstack/react-query"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -70,7 +70,7 @@ export default function TopicForm({
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 my-2">
             <FormField
               control={form.control}
               name='title'
@@ -90,16 +90,19 @@ export default function TopicForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>选择分类</FormLabel>
-                  <FormControl>
                     <Select
                       // value={field.value?.toString()}
                       value={field.value?.toString()}
                       onValueChange={(val) => field.onChange(Number(val))}
                     >
-                      <SelectTrigger className="w-full border rounded-md px-3 py-2 bg-background focus:outline-none focus:ring-2 focus:ring-ring">
+                      <FormControl>
+                      <SelectTrigger>
+                      {/*<SelectTrigger className="w-full border rounded-md px-3 py-2 bg-background focus:outline-none focus:ring-2 focus:ring-ring">*/}
                         <SelectValue placeholder="请选择" />
                       </SelectTrigger>
-                      <SelectContent className="bg-background z-50">
+                      </FormControl>
+                      <SelectContent>
+                        {/*<SelectContent className="bg-background z-50">*/}
                         {topicGroupData?.data.map(group => (
                           <SelectItem
                             key={group.group.id}
@@ -110,7 +113,6 @@ export default function TopicForm({
                         ))}
                       </SelectContent>
                     </Select>
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
