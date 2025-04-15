@@ -41,7 +41,7 @@ export default function Tools() {
             </TabsList>
             <TabsContent value={activeTab?activeTab:""} className="p-0 m-0">
               <div className="divide-y">
-              {toolData?.data.map((tool) => (
+              {toolData?.data?.map((tool) => (
                 <div className="p-4 space-y-4">
                   <div className="flex items-center gap-2">
                     <UserIcon className="h-6 w-6" />

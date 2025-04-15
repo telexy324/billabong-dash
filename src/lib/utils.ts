@@ -1,7 +1,8 @@
-import { NezhaServer } from "@/types/nezha-api"
+import { NezhaServer, ModelUpload } from "@/types/nezha-api"
 import { type ClassValue, clsx } from "clsx"
 import dayjs from "dayjs"
 import { twMerge } from "tailwind-merge"
+import { MouseEventHandler } from "react"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -338,4 +339,25 @@ export function formatBytes(
       ? (accurateSizes[i] ?? 'Bytest')
       : (sizes[i] ?? 'Bytes')
   }`;
+}
+
+export function handleDownload(
+  file?: ModelUpload
+): MouseEventHandler<HTMLButtonElement> | undefined {
+  if (!file) return undefined
+
+  return () => {
+    const link = document.createElement("a")
+    let url = ""
+    if (file.url.indexOf('http://') > -1 || file.url.indexOf('https://') > -1) {
+      url = file.url
+    } else {
+      url = "http://localhost:8008/api/v1/"+file.url
+    }
+    link.href = url
+    link.download = file.name
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 }

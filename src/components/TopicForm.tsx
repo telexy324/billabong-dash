@@ -20,8 +20,8 @@ const formSchema = z.object({
   title: z.string().min(2, {
     message: 'Product name must be at least 2 characters.'
   }),
-  content: z.any(),
-  files: z.any(),
+  content: z.string(),
+  affixes: z.any(),
 });
 
 export default function TopicForm({
@@ -94,7 +94,7 @@ export default function TopicForm({
             />
             <FormField
               control={form.control}
-              name='files'
+              name='affixes'
               render={({field}) => (
                 <div className='space-y-6'>
                   <FormItem className='w-full'>

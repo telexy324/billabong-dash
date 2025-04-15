@@ -204,6 +204,9 @@ export interface ModelUpload {
 }
 
 export interface ModelTopic {
+  /** 图片 	// 回复可见内容 */
+  affixList: string
+  affixes: ModelUpload[]
   /** 跟帖数量 */
   commentCount: number
   /** 内容 */
@@ -211,11 +214,8 @@ export interface ModelTopic {
   created_at: string
   favorited: boolean
   id: number
-  /** 图片 	// 回复可见内容 */
-  imageList: string
-  images: ModelUpload[]
   /** 最后回复时间 */
-  lastCommentTime: number
+  lastCommentTime: SqlNullTime
   /** 最后回复用户 	// 扩展数据 */
   lastCommentUserId: number
   /** 点赞数量 */
@@ -224,13 +224,13 @@ export interface ModelTopic {
   /** 是否推荐 */
   recommend: boolean
   /** 推荐时间 */
-  recommendTime: number
+  recommendTime: SqlNullTime
   /** 状态：0：正常、1：删除 */
   status: number
   /** 置顶 */
   sticky: boolean
   /** 置顶时间 */
-  stickyTime: number
+  stickyTime: SqlNullTime
   /** 用户 */
   title: string
   updated_at: string
@@ -238,39 +238,33 @@ export interface ModelTopic {
   viewCount: number
 }
 
-export interface CreateResponse {
-  success: boolean
-  data: {
-    id: number
-  }
-}
-
 export interface ModelTopicForm {
+  affixes?: ModelUpload[]
   /** 跟帖数量 */
   commentCount?: number
   /** 内容 	// 图片 	// 回复可见内容 */
-  content?: string
-  images?: ModelUpload[]
-  /** 最后回复时间 */
-  lastCommentTime?: number
-  /** 最后回复用户 	// 扩展数据 */
+  content: string
+  /** LastCommentTime   time.Time `json:"lastCommentTime,omitempty" validate:"optional"`   // 最后回复时间 */
   lastCommentUserId?: number
   /** 点赞数量 */
   likeCount?: number
   /** 是否推荐 */
   recommend?: boolean
-  /** 推荐时间 */
-  recommendTime?: number
   /** 状态：0：正常、1：删除 */
   status?: number
-  /** 置顶 */
+  /** RecommendTime     time.Time `json:"recommendTime,omitempty" validate:"optional"`     // 推荐时间 */
   sticky?: boolean
-  /** 置顶时间 */
-  stickyTime?: number
   /** 标题 */
   title: string
-  /** 查看数量 */
+  /** StickyTime        time.Time `json:"stickyTime,omitempty" validate:"optional"`        // 置顶时间 */
   viewCount?: number
+}
+
+export interface CreateResponse {
+  success: boolean
+  data: {
+    id: number
+  }
 }
 
 export interface ModelTopicGroup {
@@ -398,4 +392,10 @@ export interface ModelUpload {
   updated_at: string
   /** 文件地址 */
   url: string
+}
+
+export interface SqlNullTime {
+  time?: string
+  /** Valid is true if Time is not NULL */
+  valid?: boolean
 }

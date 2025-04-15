@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useControllableState } from '@/hooks/use-controllable-state';
-import { cn, formatBytes } from '@/lib/utils';
+import { cn, formatBytes, handleDownload } from '@/lib/utils';
 import { useTranslation } from "react-i18next"
 import { ModelUpload } from "@/types/nezha-api"
 import { fileUpload } from "@/lib/nezha-api"
@@ -329,9 +329,11 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
                 {/*) : null}*/}
                 <div className='flex w-full flex-col gap-2'>
                     <div className='space-y-px'>
-                        <p className='text-foreground/80 line-clamp-1 text-sm font-medium'>
+                      <Button variant="ghost" asChild onClick={handleDownload(file)} className="p-0 h-auto">
+                        <p className='text-foreground/80 line-clamp-1 text-sm font-medium cursor-pointer hover:text-blue-600 focus:text-blue-600 focus:outline-none'>
                             {file.name}
                         </p>
+                      </Button>
                         <p className='text-muted-foreground text-xs'>
                             {formatBytes(file.size)}
                         </p>

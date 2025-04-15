@@ -14,6 +14,9 @@ import { UserIcon } from "@heroicons/react/20/solid"
 import { Separator } from "@/components/ui/separator"
 import CommentForm from "@/components/CommentForm.tsx"
 import { CommentList } from "@/components/CommentList.tsx"
+import { Button } from "@/components/ui/button.tsx"
+import * as React from "react"
+import { handleDownload } from "@/lib/utils.ts"
 
 export default function TopicDetail() {
   const navigate = useNavigate()
@@ -77,6 +80,16 @@ export default function TopicDetail() {
             </CardHeader>
             <CardContent className="border-t">
               <HtmlRenderer html={data ? data.content : ""}/>
+              <Separator className="my-6" />
+              {data?.affixes?.map((affix) => (
+                <div className="flex" key={affix.id}>
+                  <Button variant="ghost" asChild onClick={handleDownload(affix)} className="p-0 h-auto">
+                    <p className='text-foreground/80 line-clamp-1 text-sm font-medium cursor-pointer hover:text-blue-600 focus:text-blue-600 focus:outline-none'>
+                      {affix.name}
+                    </p>
+                  </Button>
+                </div>
+              ))}
             </CardContent>
             <CardFooter className="flex justify-between">
               <div className="flex gap-6 items-center">
