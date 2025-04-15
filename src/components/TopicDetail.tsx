@@ -113,7 +113,6 @@ export default function TopicDetail() {
 
             <Separator className="my-6" />
             <CommentList
-              onLoadMore={() => console.log("加载更多")}
               entityType={1}
               entityId={data?data.id:0}
               refreshSignal={refreshSignal}

@@ -384,3 +384,18 @@ export interface CommentResponse {
   success: boolean
   data: ModelComment[]
 }
+
+export interface ModelUpload {
+  created_at: string
+  id: number
+  /** 编号 */
+  key: string
+  /** 文件名 */
+  name: string
+  size: number
+  /** 文件标签 */
+  tag: string
+  updated_at: string
+  /** 文件地址 */
+  url: string
+}

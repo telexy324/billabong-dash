@@ -14,12 +14,14 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import MDEditor from "@/components/MDEditor"
 import { createTopic } from "@/lib/nezha-api.ts"
+import { FileUploader } from "@/components/FileUploader.tsx"
 
 const formSchema = z.object({
   title: z.string().min(2, {
     message: 'Product name must be at least 2 characters.'
   }),
   content: z.any(),
+  files: z.any(),
 });
 
 export default function TopicForm({
@@ -88,6 +90,31 @@ export default function TopicForm({
                   </FormControl>
                   <FormMessage />
                 </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='files'
+              render={({field}) => (
+                <div className='space-y-6'>
+                  <FormItem className='w-full'>
+                    <FormLabel>files</FormLabel>
+                    <FormControl>
+                      <FileUploader
+                        value={field.value}
+                        onValueChange={(files) => {
+                          // console.log("上传的文件：", files) // ✅ 调试
+                          // console.log("手动获取 values.files：", form.getValues("files"));
+                          // console.log("手动获取 values.name：", form.getValues("name"));
+                          field.onChange(files)
+                        }}
+                        maxFiles={4}
+                        maxSize={4 * 1024 * 1024}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </div>
               )}
             />
             <Button type='submit' className='bg-green-500'>发表</Button>

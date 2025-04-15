@@ -1,5 +1,5 @@
 // import MDEditor from "@/components/MDEditor"
-import TopicForm from "@/components/topic-form.tsx"
+import TopicForm from "@/components/TopicForm.tsx"
 
 export default function MD() {
   return (

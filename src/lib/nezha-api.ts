@@ -213,3 +213,17 @@ export const fetchComment = async (entityId: number, entityType: number, limit: 
   }
   return data
 }
+
+export const fileUpload = async (data: File): Promise<ModelUpload> => {
+  const formData = new FormData();
+  formData.append("file", data);
+  const response = await fetch("/api/v1/file", {
+    method: "POST",
+    body: formData,
+  })
+  const res = await response.json()
+  if (res.error) {
+    throw new Error(res.error)
+  }
+  return res.data
+}

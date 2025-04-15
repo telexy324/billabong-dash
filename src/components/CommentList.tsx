@@ -32,7 +32,7 @@ export function CommentList({ entityId,entityType,refreshSignal,onCountChange }:
   return (
     <>
       <div className="space-y-6">
-        {data?.data.map((comment) => (
+        {data?.data?.map((comment) => (
           <div className="flex" key={comment.id}>
             <UserIcon className="h-6 w-6 mr-3 mt-1" />
             <div>
