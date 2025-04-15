@@ -104,7 +104,7 @@ export default function TopicDetail() {
                   active={data?data.favorited:false}
                   icon={{ active: SolidHeart, inactive: OutlineHeart }}
                   activeColor="text-red-500"
-                  req={{entityId:data?data.id:0,entityType:2}}
+                  req={{entityId:data?data.id:0,entityType:1}}
                 />
               </div>
             </CardFooter>
