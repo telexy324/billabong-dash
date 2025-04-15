@@ -13,8 +13,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import MDEditor from "@/components/MDEditor"
-import { createTopic } from "@/lib/nezha-api.ts"
+import { createTopic, fetchTopicGroup } from "@/lib/nezha-api.ts"
 import { FileUploader } from "@/components/FileUploader.tsx"
+import { useQuery } from "@tanstack/react-query"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select"
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -22,6 +24,7 @@ const formSchema = z.object({
   }),
   content: z.string(),
   affixes: z.any(),
+  topicGroup: z.number().min(1)
 });
 
 export default function TopicForm({
@@ -37,6 +40,10 @@ export default function TopicForm({
   //   price: initialData?.price || 0,
   //   description: initialData?.description || ''
   // };
+  const { data: topicGroupData } = useQuery({
+    queryKey: ["topicGroup"],
+    queryFn: () => fetchTopicGroup(),
+  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,7 +76,7 @@ export default function TopicForm({
               name='title'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product Name</FormLabel>
+                  <FormLabel>标题</FormLabel>
                   <FormControl>
                     <Input placeholder='Enter product name' {...field} />
                   </FormControl>
@@ -79,7 +86,38 @@ export default function TopicForm({
             />
             <FormField
               control={form.control}
-              name='content'
+              name='topicGroup'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>选择分类</FormLabel>
+                  <FormControl>
+                    <Select
+                      // value={field.value?.toString()}
+                      value={field.value?.toString()}
+                      onValueChange={(val) => field.onChange(Number(val))}
+                    >
+                      <SelectTrigger className="w-full border rounded-md px-3 py-2 bg-background focus:outline-none focus:ring-2 focus:ring-ring">
+                        <SelectValue placeholder="请选择" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background z-50">
+                        {topicGroupData?.data.map(group => (
+                          <SelectItem
+                            key={group.group.id}
+                            value={group.group.id.toString()}
+                          >
+                            {group.group.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="content"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
