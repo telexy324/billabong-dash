@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx"
 
 export default function Topic() {
   const { data: groupData } = useQuery({
@@ -45,8 +46,11 @@ export default function Topic() {
               {topicData?.data.map((topic) => (
                 <div className="p-4 space-y-4">
                   <div className="flex items-center gap-2">
-                    <UserIcon className="h-6 w-6" />
-                    <span className="text-sm font-medium">用户名</span>
+                    <Avatar>
+                      <AvatarImage src="http://localhost:8008/api/v1/uploads/file/avatar1.png" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium">{topic.userName}</span>
                     <span className="text-xs text-gray-500">发表了话题</span>
                   </div>
                   <Link to={`/topic/${topic.id}`}>

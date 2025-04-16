@@ -234,6 +234,7 @@ export interface ModelTopic {
   /** 用户 */
   title: string
   updated_at: string
+  userName: string
   /** 查看数量 */
   viewCount: number
 }
