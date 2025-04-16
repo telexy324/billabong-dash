@@ -1,7 +1,7 @@
 // components/LikeButton.tsx
 // import { HandThumbUpIcon as SolidLike } from "@heroicons/react/24/solid";
 // import { HandThumbUpIcon as OutlineLike } from "@heroicons/react/24/outline";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { m } from "framer-motion"
 import clsx from "clsx"
@@ -45,6 +45,14 @@ export const LikeButton = ({
                              }: ActionButtonProps) => {
   const [isActive, setIsActive] = useState(active);
   const [displayCount, setDisplayCount] = useState(count);
+
+  useEffect(() => {
+    setIsActive(active)
+  }, [active])
+
+  useEffect(() => {
+    setDisplayCount(count)
+  }, [count])
 
   const mutation = useMutation({
     mutationFn: async (newState: boolean) => {

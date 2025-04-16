@@ -75,9 +75,11 @@ export default function Topic() {
                   <p className="text-xs text-gray-500">查看个人主页</p>
                 </div>
               </div>
-              <Button variant="outline" size="sm">
-                写文章
-              </Button>
+              <Link to="/mdeditor">
+                <Button variant="outline" size="sm" >
+                  写文章
+                </Button>
+              </Link>
             </div>
             <div className="grid grid-cols-2 gap-2 text-center">
               <div className="p-2 bg-gray-50 rounded">

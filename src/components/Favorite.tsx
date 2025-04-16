@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { m } from "framer-motion"
 import clsx from "clsx"
@@ -22,6 +22,10 @@ export const FavoriteButton = ({
                              activeColor,
                            }: ActionButtonProps) => {
   const [isActive, setIsActive] = useState(active);
+
+  useEffect(() => {
+    setIsActive(active)
+  }, [active])
 
   const mutation = useMutation({
     mutationFn: async (newState: boolean) => {
