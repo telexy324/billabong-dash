@@ -15,8 +15,8 @@ import { Separator } from "@/components/ui/separator"
 import CommentForm from "@/components/CommentForm.tsx"
 import { CommentList } from "@/components/CommentList.tsx"
 import { Button } from "@/components/ui/button.tsx"
-import * as React from "react"
 import { handleDownload } from "@/lib/utils.ts"
+import HtmlRenderer from "@/components/HtmlRender.tsx"
 
 export default function TopicDetail() {
   const navigate = useNavigate()
@@ -47,19 +47,19 @@ export default function TopicDetail() {
     return null
   }
 
-  interface HtmlRendererProps {
-    html: string;
-    className?: string;
-  }
-
-  const HtmlRenderer: React.FC<HtmlRendererProps> = ({ html, className }) => {
-    return (
-      <div
-        className={className}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
-    )
-  }
+  // interface HtmlRendererProps {
+  //   html: string;
+  //   className?: string;
+  // }
+  //
+  // const HtmlRenderer: React.FC<HtmlRendererProps> = ({ html, className }) => {
+  //   return (
+  //     <div
+  //       className={className}
+  //       dangerouslySetInnerHTML={{ __html: html }}
+  //     />
+  //   )
+  // }
 
   return (
     <div className="mx-auto w-full max-w-5xl px-0">

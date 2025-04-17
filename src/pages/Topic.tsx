@@ -1,5 +1,5 @@
 import { fetchTopicGroup, fetchTopic } from "@/lib/nezha-api"
-import { ChevronRightIcon, UserIcon } from "@heroicons/react/20/solid"
+import { ChevronRightIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx"
+import HtmlRenderer from "@/components/HtmlRender.tsx"
 
 export default function Topic() {
   const { data: groupData } = useQuery({
@@ -56,9 +57,7 @@ export default function Topic() {
                   <Link to={`/topic/${topic.id}`}>
                     <h3 className="text-lg font-bold hover:text-blue-600">{topic.title}</h3>
                   </Link>
-                  <p className="text-gray-700 line-clamp-3">
-                    {topic.title}
-                  </p>
+                  <HtmlRenderer html={topic.content}/>
                 </div>
               ))}
               </div>
@@ -73,7 +72,10 @@ export default function Topic() {
             <h3 className="font-medium mb-3">创作中心</h3>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <UserIcon className="h-6 w-6" />
+                <Avatar>
+                  <AvatarImage src="http://localhost:8008/api/v1/uploads/file/avatar1.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
                 <div>
                   <p className="font-medium">用户名</p>
                   <p className="text-xs text-gray-500">查看个人主页</p>
