@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx"
-import HtmlRenderer from "@/components/HtmlRender.tsx"
+import HtmlRendererWithImage from "@/components/HtmlRenderWithImage.tsx"
 
 export default function Topic() {
   const { data: groupData } = useQuery({
@@ -57,7 +57,7 @@ export default function Topic() {
                   <Link to={`/topic/${topic.id}`}>
                     <h3 className="text-lg font-bold hover:text-blue-600">{topic.title}</h3>
                   </Link>
-                  <HtmlRenderer html={topic.content}/>
+                  <HtmlRendererWithImage html={topic.content}/>
                 </div>
               ))}
               </div>

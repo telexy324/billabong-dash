@@ -272,3 +272,7 @@
 .prose a {
   @apply text-cyan-600 hover:text-cyan-700 underline;
 }
+
+.tailwind-safe-img {
+  @apply w-24 h-24 float-left object-cover mr-4 mb-2 rounded shrink-0;
+}
