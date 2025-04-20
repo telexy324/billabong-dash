@@ -1,4 +1,3 @@
-import { UserIcon } from "@heroicons/react/20/solid"
 import { Button } from "@/components/ui/button"
 import { LikeButton } from "@/components/Like.tsx"
 import { HandThumbUpIcon as SolidLike } from "@heroicons/react/24/solid"
@@ -6,6 +5,7 @@ import { HandThumbUpIcon as OutlineLike } from "@heroicons/react/24/outline"
 import { useQuery } from "@tanstack/react-query"
 import { fetchComment } from "@/lib/nezha-api.ts"
 import { useEffect, useState } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx"
 
 type CommentListProps = {
   entityId: number
@@ -34,7 +34,12 @@ export function CommentList({ entityId,entityType,refreshSignal,onCountChange }:
       <div className="space-y-6">
         {data?.data?.map((comment) => (
           <div className="flex" key={comment.id}>
-            <UserIcon className="h-6 w-6 mr-3 mt-1" />
+            <div className="p-1">
+              <Avatar>
+                <AvatarImage src="http://localhost:8008/api/v1/uploads/file/avatar1.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </div>
             <div>
               <div className="font-medium">用户</div>
               <div className="text-sm text-gray-500">{comment.created_at}</div>

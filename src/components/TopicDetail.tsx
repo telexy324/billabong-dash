@@ -9,7 +9,6 @@ import { HandThumbUpIcon as SolidLike } from "@heroicons/react/24/solid"
 import { HandThumbUpIcon as OutlineLike } from "@heroicons/react/24/outline"
 import { HeartIcon as SolidHeart } from "@heroicons/react/24/solid"
 import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline"
-import { UserIcon } from "@heroicons/react/20/solid"
 // import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import CommentForm from "@/components/CommentForm.tsx"
@@ -17,6 +16,7 @@ import { CommentList } from "@/components/CommentList.tsx"
 import { Button } from "@/components/ui/button.tsx"
 import { handleDownload } from "@/lib/utils.ts"
 import HtmlRenderer from "@/components/HtmlRender.tsx"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx"
 
 export default function TopicDetail() {
   const navigate = useNavigate()
@@ -113,15 +113,20 @@ export default function TopicDetail() {
             <h3 className="mb-4 text-xl font-bold">评论 ({commentCount})</h3>
 
             <div className="flex mb-4">
-            <UserIcon className="h-6 w-6" />
-            <CommentForm
-              className="w-full p-3 text-sm border border-gray-200 rounded-none focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
-              initialData={{
-                entityId:data?data.id:0,
-                entityType:1,
-              }}
-              onValueCommit={handleValueCommit}
-            />
+              <div className="p-1">
+                <Avatar>
+                  <AvatarImage src="http://localhost:8008/api/v1/uploads/file/avatar1.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </div>
+              <CommentForm
+                className="w-full p-3 text-sm border border-gray-200 rounded-none focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
+                initialData={{
+                  entityId:data?data.id:0,
+                  entityType:1,
+                }}
+                onValueCommit={handleValueCommit}
+              />
             </div>
 
             <Separator className="my-6" />
